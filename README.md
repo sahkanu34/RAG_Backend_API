@@ -92,7 +92,7 @@ docker-compose up -d
 # - Redis: localhost:6379
 ```
 
-5. [ ] **Run the server**:
+5. **Run the server**:
 
 ```bash
 python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
@@ -102,6 +102,14 @@ python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 - Swagger UI: http://localhost:8000/docs
 - ReDoc: http://localhost:8000/redoc
+
+### Swagger UI Documentation
+
+![Swagger UI - RAG Backend API](images/Screenshot_1.png)
+
+### ReDoc API Documentation
+
+![ReDoc - RAG Backend API Documentation](images/Screenshot_2.png)
 
 ## API Endpoints
 
