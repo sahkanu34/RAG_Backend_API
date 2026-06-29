@@ -1,13 +1,8 @@
-<<<<<<< HEAD
+# *NEURAL RAG API v2.0 Build 20260629 - Conversational AI System*
 
-# RAG Backend API - Conversational AI System
-=======
-# NEURAL NEST RAG API v1.0 - Conversational AI System
->>>>>>> 2f016b18b1e06361140cc269af76fb5e227da129
+### Production-ready FastAPI backend for document ingestion and conversational RAG with interview booking extraction.
 
-Production-ready FastAPI backend for document ingestion and conversational RAG with interview booking extraction.
-
-![CLI UI - RAG Backend API](images/image.png)
+![CLI UI - RAG Backend API](images/image_2.png)
 
 ## Features
 

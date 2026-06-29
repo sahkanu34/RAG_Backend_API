@@ -1,6 +1,6 @@
 """
-banner.py — NEST RAG API  v2.0
-Premium boot screen for the NEST RAG stack (Redis · Qdrant · FastAPI)
+banner.py — NEURAL RAG API  v2.0
+Premium boot screen for the NEURAL RAG stack (Redis · Qdrant · FastAPI)
 """
 
 import time, sys, os, subprocess, socket, shutil
@@ -105,12 +105,12 @@ AMBER   = "yellow3"
 ICE     = "bright_cyan"
 
 LOGO_LINES = [
-    "  ███╗   ██╗███████╗███████╗████████╗",
-    "  ████╗  ██║██╔════╝██╔════╝╚══██╔══╝",
-    "  ██╔██╗ ██║█████╗  ███████╗   ██║   ",
-    "  ██║╚██╗██║██╔══╝  ╚════██║   ██║   ",
-    "  ██║ ╚████║███████╗███████║   ██║   ",
-    "  ╚═╝  ╚═══╝╚══════╝╚══════╝   ╚═╝   ",
+    "  ███╗   ██╗███████╗██╗   ██╗██████╗  █████╗ ██╗     ",
+    "  ████╗  ██║██╔════╝██║   ██║██╔══██╗██╔══██╗██║     ",
+    "  ██╔██╗ ██║█████╗  ██║   ██║██████╔╝███████║██║     ",
+    "  ██║╚██╗██║██╔══╝  ██║   ██║██╔══██╗██╔══██║██║     ",
+    "  ██║ ╚████║███████╗╚██████╔╝██║  ██║██║  ██║███████╗",
+    "  ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝",
 ]
 
 TAGLINE = "Retrieval-Augmented Generation · Production Stack"
