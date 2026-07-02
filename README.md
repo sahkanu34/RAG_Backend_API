@@ -244,7 +244,7 @@ The result is a scalable AI backend capable of delivering:
 1. **Clone and setup environment**:
 
 ```bash
-cd d:/Palm_Mind_Task
+cd d:/NEURAL_RAG_API
 python -m venv venv
 .\venv\Scripts\Activate.ps1  # Windows
 # or: source venv/bin/activate  # Linux/Mac
