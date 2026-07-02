@@ -3,6 +3,8 @@
 ### Production-ready FastAPI backend for document ingestion and conversational RAG with interview booking extraction.
 
 ![CLI UI - RAG Backend API](images/image_2.png)
+![CLI UI - Qdrant Vector Search](images/image4.png)
+![CLI UI - Redis Insight](images/image5.png)
 
 ## Features
 
@@ -13,7 +15,7 @@
 - **Chunking Strategies**:
   - Fixed-size chunking with configurable overlap
   - Semantic chunking with sentence-boundary awareness
-- **Embeddings**: OpenAI embeddings generation
+- **Embeddings**: NVIDIA embeddings generation
 - **Vector Storage**: Qdrant, Pinecone, Weaviate, Milvus support
 - **Metadata Storage**: SQLAlchemy with SQLite/PostgreSQL support
 
@@ -55,7 +57,7 @@
 ### Prerequisites
 
 - Python 3.9+
-- OpenAI API key
+- NVIDIA API key
 - Redis (for chat memory)
 - Qdrant (for vector storage)
 
@@ -80,7 +82,7 @@ pip install -r requirements.txt
 
 ```bash
 cp .env.example .env
-# Edit .env and add your OpenAI API key
+# Edit .env and add your NVIDIA API key
 ```
 
 4. **Start dependencies**:
@@ -239,10 +241,10 @@ HOST=0.0.0.0
 PORT=8000
 DEBUG=False
 
-# LLM (OpenAI)
-OPENAI_API_KEY=your-key-here
-OPENAI_MODEL=gpt-4
-OPENAI_EMBEDDING_MODEL=text-embedding-3-small
+# LLM (NVIDIA)
+NVIDIA_API_KEY=nvapi-your-key-here
+NVIDIA_MODEL=nvidia/nemotron-3-ultra-550b-a55b
+NVIDIA_EMBEDDING_MODEL=NV-Embed-QA
 
 # Vector Database
 VECTOR_DB_TYPE=qdrant  # Options: qdrant, pinecone, weaviate, milvus
@@ -410,7 +412,7 @@ curl -X POST "http://localhost:8000/api/chat/message" \
 
 ### LLM
 
-- **OpenAI**: LLM and embeddings API
+- **NVIDIA**: LLM and embeddings API
 
 ## Error Handling
 
@@ -480,9 +482,9 @@ curl http://localhost:6333/health
 # Should return: {"status":"ok"}
 ```
 
-### OpenAI API Error
+### NVIDIA API Error
 
-- Check OPENAI_API_KEY is valid
+- Check NVIDIA_API_KEY is valid
 - Check API key has sufficient quota
 - Verify network connectivity
 
