@@ -48,6 +48,7 @@ env/
 # Logs
 *.log
 logs/
+file.jpe
 
 # Temporary files
 *.tmp

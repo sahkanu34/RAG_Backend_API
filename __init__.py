@@ -9,7 +9,7 @@ Architecture:
 - Qdrant/Pinecone for vector storage
 - SQLAlchemy with SQLite for metadata
 - Redis for chat session management
-- OpenAI for embeddings and LLM
+- NVIDIA for embeddings and LLM
 """
 
 __version__ = "1.0.0"
