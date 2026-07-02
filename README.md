@@ -451,7 +451,7 @@ SIMILARITY_THRESHOLD=0.3
 ## Project Structure
 
 ```
-Palm_Mind_Task/
+NEURAL_RAG_API v2.0/
 ├── app/
 │   ├── api/
 │   │   ├── documents.py          # Document upload/list endpoints
