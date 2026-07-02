@@ -16,8 +16,7 @@ class Settings(BaseSettings):
     # LLM Settings
     LLM_PROVIDER: Literal["nvidia"] = "nvidia"
     NVIDIA_API_KEY: str = os.getenv(
-        "NVIDIA_API_KEY",
-        "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",
+        "NVIDIA_API_KEY"
     )
     NVIDIA_MODEL: str = "nvidia/nemotron-3-ultra-550b-a55b"
     NVIDIA_EMBEDDING_MODEL: str = "NV-Embed-QA"
