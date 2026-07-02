@@ -33,9 +33,13 @@ class VectorDBClient(ABC):
 
     @abstractmethod
     def search(
-        self, query_vector: List[float], top_k: int = 5, threshold: float = 0.3
+        self,
+        query_vector: List[float],
+        top_k: int = 5,
+        threshold: float = 0.3,
+        filter_dict: Optional[Dict[str, Any]] = None,
     ) -> List[VectorSearchResult]:
-        """Search for similar vectors."""
+        """Search for similar vectors, optionally filtered by metadata."""
         pass
 
     @abstractmethod
@@ -52,13 +56,13 @@ class VectorDBClient(ABC):
 class QdrantClient(VectorDBClient):
     """Qdrant vector database client."""
 
-    def __init__(self, url: str, collection_name: str, vector_size: int = 1536):
+    def __init__(self, url: str, collection_name: str, vector_size: int = 1024):
         """Initialize Qdrant client.
-        
+
         Args:
             url: Qdrant server URL
             collection_name: Name of the collection
-            vector_size: Dimension of vectors (default for text-embedding-3-small)
+            vector_size: Dimension of vectors (default for NVIDIA embeddings)
         """
         self.url = url
         self.collection_name = collection_name
@@ -70,7 +74,7 @@ class QdrantClient(VectorDBClient):
         try:
             from qdrant_client import QdrantClient as QdrantLib
             from qdrant_client.http.models import Distance, VectorParams
-            
+
             self.client = QdrantLib(url=self.url)
             self.Distance = Distance
             self.VectorParams = VectorParams
@@ -81,7 +85,7 @@ class QdrantClient(VectorDBClient):
         """Create collection if not exists."""
         if not self.client:
             self.connect()
-        
+
         try:
             self.client.get_collection(self.collection_name)
         except Exception:
@@ -97,9 +101,9 @@ class QdrantClient(VectorDBClient):
         """Insert vectors with metadata."""
         if not self.client:
             self.connect()
-        
+
         from qdrant_client.http.models import PointStruct
-        
+
         points = [
             PointStruct(
                 id=int(hash(id_) & 0x7fffffff),
@@ -114,27 +118,52 @@ class QdrantClient(VectorDBClient):
         )
 
     def search(
-        self, query_vector: List[float], top_k: int = 5, threshold: float = 0.3
+        self,
+        query_vector: List[float],
+        top_k: int = 5,
+        threshold: float = 0.3,
+        filter_dict: Optional[Dict[str, Any]] = None,
     ) -> List[VectorSearchResult]:
-        """Search for similar vectors."""
+        """Search for similar vectors, optionally filtered by metadata.
+
+        Args:
+            query_vector: Query embedding
+            top_k: Number of results to return
+            threshold: Minimum similarity score
+            filter_dict: Optional dict of metadata field->value to filter on,
+                e.g. {"document_id": 5}. Matches against payload path
+                "metadata.<key>", since insert() stores fields under "metadata".
+        """
         if not self.client:
             self.connect()
-        
-        results = self.client.search(
+
+        qdrant_filter = None
+        if filter_dict:
+            from qdrant_client.http.models import Filter, FieldCondition, MatchValue
+
+            conditions = [
+                FieldCondition(key=f"metadata.{key}", match=MatchValue(value=value))
+                for key, value in filter_dict.items()
+            ]
+            qdrant_filter = Filter(must=conditions)
+
+        results = self.client.query_points(
             collection_name=self.collection_name,
-            query_vector=query_vector,
+            query=query_vector,
+            query_filter=qdrant_filter,
             limit=top_k,
             score_threshold=threshold,
+            with_payload=True,
         )
-        
+
         search_results = []
-        for result in results:
-            payload = result.payload
+        for result in results.points:
+            payload = result.payload or {}
             search_results.append(
                 VectorSearchResult(
                     id=payload.get("id", ""),
                     text=payload.get("text", ""),
-                    score=result.score,
+                    score=result.score if hasattr(result, 'score') else 0.0,
                     metadata=payload.get("metadata", {})
                 )
             )
@@ -144,7 +173,7 @@ class QdrantClient(VectorDBClient):
         """Delete vectors by IDs."""
         if not self.client:
             self.connect()
-        
+
         numeric_ids = [int(hash(id_) & 0x7fffffff) for id_ in ids]
         self.client.delete(
             collection_name=self.collection_name,
@@ -160,7 +189,7 @@ class QdrantClient(VectorDBClient):
 class PineconeClient(VectorDBClient):
     """Pinecone vector database client."""
 
-    def __init__(self, api_key: str, environment: str, index_name: str, vector_size: int = 1536):
+    def __init__(self, api_key: str, environment: str, index_name: str, vector_size: int = 1024):
         """Initialize Pinecone client."""
         self.api_key = api_key
         self.environment = environment
@@ -173,7 +202,7 @@ class PineconeClient(VectorDBClient):
         """Initialize Pinecone connection."""
         try:
             from pinecone import Pinecone
-            
+
             self.client = Pinecone(api_key=self.api_key)
             self.index = self.client.Index(self.index_name)
         except ImportError:
@@ -183,7 +212,7 @@ class PineconeClient(VectorDBClient):
         """Create index if not exists."""
         if not self.client:
             self.connect()
-        
+
         # Pinecone index creation typically done via console
         # This is a no-op for compatibility
 
@@ -191,7 +220,7 @@ class PineconeClient(VectorDBClient):
         """Insert vectors with metadata."""
         if not self.index:
             self.connect()
-        
+
         vectors_to_upsert = [
             (id_, vector, meta)
             for id_, vector, meta in zip(ids, vectors, metadata)
@@ -199,18 +228,31 @@ class PineconeClient(VectorDBClient):
         self.index.upsert(vectors=vectors_to_upsert)
 
     def search(
-        self, query_vector: List[float], top_k: int = 5, threshold: float = 0.3
+        self,
+        query_vector: List[float],
+        top_k: int = 5,
+        threshold: float = 0.3,
+        filter_dict: Optional[Dict[str, Any]] = None,
     ) -> List[VectorSearchResult]:
-        """Search for similar vectors."""
+        """Search for similar vectors, optionally filtered by metadata.
+
+        Args:
+            query_vector: Query embedding
+            top_k: Number of results to return
+            threshold: Minimum similarity score
+            filter_dict: Optional Pinecone-native metadata filter,
+                e.g. {"document_id": 5}
+        """
         if not self.index:
             self.connect()
-        
+
         results = self.index.query(
             vector=query_vector,
             top_k=top_k,
             include_metadata=True,
+            filter=filter_dict if filter_dict else None,
         )
-        
+
         search_results = []
         for match in results.get("matches", []):
             if match["score"] >= threshold:
@@ -229,7 +271,7 @@ class PineconeClient(VectorDBClient):
         """Delete vectors by IDs."""
         if not self.index:
             self.connect()
-        
+
         self.index.delete(ids=ids)
 
     def close(self) -> None:
@@ -239,11 +281,11 @@ class PineconeClient(VectorDBClient):
 
 def get_vector_db_client(db_type: str, **kwargs) -> VectorDBClient:
     """Factory function to get appropriate vector database client.
-    
+
     Args:
         db_type: Type of vector database (qdrant, pinecone, weaviate, milvus)
         **kwargs: Additional arguments for the client
-        
+
     Returns:
         VectorDBClient instance (not yet connected)
     """
@@ -251,17 +293,17 @@ def get_vector_db_client(db_type: str, **kwargs) -> VectorDBClient:
         client = QdrantClient(
             url=kwargs.get("url", "http://localhost:6333"),
             collection_name=kwargs.get("collection_name", "documents"),
-            vector_size=kwargs.get("vector_size", 1536)
+            vector_size=kwargs.get("vector_size", 1024)
         )
     elif db_type.lower() == "pinecone":
         client = PineconeClient(
             api_key=kwargs.get("api_key", ""),
             environment=kwargs.get("environment", ""),
             index_name=kwargs.get("index_name", "documents"),
-            vector_size=kwargs.get("vector_size", 1536)
+            vector_size=kwargs.get("vector_size", 1024)
         )
     else:
         raise ValueError(f"Unsupported vector database type: {db_type}")
-    
+
     # Defer connection to first use
     return client

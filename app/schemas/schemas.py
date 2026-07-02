@@ -72,6 +72,11 @@ class ChatHistoryResponse(BaseModel):
     created_at: datetime
 
 
+class ChatRequest(BaseModel):
+    session_id: str
+    message: str
+    document_id: Optional[int] = None 
+
 # Interview Booking Schemas
 
 class BookingInfo(BaseModel):
@@ -108,3 +113,11 @@ class ErrorResponse(BaseModel):
     detail: str
     error_code: Optional[str] = None
     timestamp: datetime = Field(default_factory=datetime.utcnow)
+
+from typing import Optional  # make sure this import exists at the top of schemas.py
+
+class ChatRequest(BaseModel):
+    session_id: str
+    message: str
+    document_id: Optional[int] = None   # NEW — add this line inside the existing class
+ 

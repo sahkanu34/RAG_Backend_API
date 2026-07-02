@@ -68,15 +68,18 @@ async def upload_document(
         )
         
         embeddings_gen = get_embeddings_generator(
-            api_key=settings.OPENAI_API_KEY,
-            model=settings.OPENAI_EMBEDDING_MODEL
+            api_key=settings.NVIDIA_API_KEY,
+            model=settings.NVIDIA_EMBEDDING_MODEL,
         )
         
         vector_db = get_vector_db_client(
             db_type=settings.VECTOR_DB_TYPE,
             url=settings.QDRANT_URL if settings.VECTOR_DB_TYPE == "qdrant" else None,
             collection_name=settings.QDRANT_COLLECTION_NAME,
+            vector_size=getattr(embeddings_gen, "dimension", settings.EMBEDDING_VECTOR_SIZE),
         )
+        vector_db.connect()
+        vector_db.create_collection()
         
         ingestor = DocumentIngestor(
             db=db,

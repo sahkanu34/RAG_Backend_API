@@ -22,7 +22,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="RAG Backend API",
+    title="NEURAL RAG Backend API v2.0",
     description="Conversational RAG system with document ingestion and interview booking",
     version="1.0.0",
     lifespan=lifespan,
@@ -55,7 +55,7 @@ async def health_check() -> dict:
 async def root() -> dict:
     """Root endpoint."""
     return {
-        "message": "RAG Backend API",
+        "message": "NEURAL RAG Backend API",
         "docs": "/docs",
         "health": "/health"
     }

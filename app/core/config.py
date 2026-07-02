@@ -1,6 +1,7 @@
 """Configuration module for RAG backend."""
 import os
 from typing import Literal
+
 from pydantic_settings import BaseSettings
 
 
@@ -13,10 +14,14 @@ class Settings(BaseSettings):
     DEBUG: bool = False
 
     # LLM Settings
-    LLM_PROVIDER: Literal["openai"] = "openai"
-    OPENAI_API_KEY: str
-    OPENAI_MODEL: str = "gpt-4"
-    OPENAI_EMBEDDING_MODEL: str = "text-embedding-3-small"
+    LLM_PROVIDER: Literal["nvidia"] = "nvidia"
+    NVIDIA_API_KEY: str = os.getenv(
+        "NVIDIA_API_KEY",
+        "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",
+    )
+    NVIDIA_MODEL: str = "nvidia/nemotron-3-ultra-550b-a55b"
+    NVIDIA_EMBEDDING_MODEL: str = "NV-Embed-QA"
+    EMBEDDING_VECTOR_SIZE: int = 1024
 
     # Vector DB Settings
     VECTOR_DB_TYPE: Literal["pinecone", "qdrant", "weaviate", "milvus"] = "qdrant"
@@ -24,11 +29,11 @@ class Settings(BaseSettings):
     # Pinecone
     PINECONE_API_KEY: str = ""
     PINECONE_ENVIRONMENT: str = ""
-    PINECONE_INDEX_NAME: str = "documents"
+    PINECONE_INDEX_NAME: str = "documents_nvidia"
     
     # Qdrant
     QDRANT_URL: str = "http://localhost:6333"
-    QDRANT_COLLECTION_NAME: str = "documents"
+    QDRANT_COLLECTION_NAME: str = "documents_nvidia"
     
     # Weaviate
     WEAVIATE_URL: str = "http://localhost:8080"
