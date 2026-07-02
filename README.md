@@ -672,7 +672,7 @@ This project is released under the **MIT License**.
 
 ---
 
-## 👨‍💻 Author
+## 👨‍💻 Developer
 
 **Suraj Sah Kanu**
 
