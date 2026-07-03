@@ -33,18 +33,18 @@ The platform combines **vector search**, **context-aware memory**, **LLM orchest
 
 ## 🏗️ Tech Stack
 
-| Category | Technology |
-|-----------|------------|
-| **Backend Framework** | FastAPI |
-| **Programming Language** | Python 3.11+ |
-| **LLM Orchestration** | LangChain |
-| **Inference Engine** | NVIDIA NIM |
-| **Vector Database** | Qdrant |
-| **Caching & Memory** | Redis |
-| **Embedding Models** | NVIDIA Embeddings / Sentence Transformers |
-| **Document Processing** | PyMuPDF, Unstructured |
-| **API Architecture** | REST API |
-| **Containerization** | Docker, Docker Compose |
+| Category                       | Technology                                |
+| ------------------------------ | ----------------------------------------- |
+| **Backend Framework**    | FastAPI                                   |
+| **Programming Language** | Python 3.11+                              |
+| **LLM Orchestration**    | LangChain                                 |
+| **Inference Engine**     | NVIDIA NIM                                |
+| **Vector Database**      | Qdrant                                    |
+| **Caching & Memory**     | Redis                                     |
+| **Embedding Models**     | NVIDIA Embeddings / Sentence Transformers |
+| **Document Processing**  | PyMuPDF, Unstructured                     |
+| **API Architecture**     | REST API                                  |
+| **Containerization**     | Docker, Docker Compose                    |
 
 ---
 
@@ -67,15 +67,15 @@ The platform combines **vector search**, **context-aware memory**, **LLM orchest
 
 ## 📊 Performance Highlights
 
-| Metric | Performance |
-|---------|------------:|
-| 🎯 Hallucination Reduction | **Up to 95%*** |
-| ⚡ Average Response Time | **< 2 Seconds** |
-| 📚 Retrieval Accuracy | **94%+** |
-| 🔍 Semantic Search | **High Precision** |
-| 🚀 API Throughput | **Production Ready** |
-| 📄 Document Support | **Multi-format** |
-| 🔄 Concurrent Requests | **Horizontally Scalable** |
+| Metric                     |                     Performance |
+| -------------------------- | ------------------------------: |
+| 🎯 Hallucination Reduction |            **Up to 95%*** |
+| ⚡ Average Response Time   |           **< 2 Seconds** |
+| 📚 Retrieval Accuracy      |                  **94%+** |
+| 🔍 Semantic Search         |        **High Precision** |
+| 🚀 API Throughput          |      **Production Ready** |
+| 📄 Document Support        |          **Multi-format** |
+| 🔄 Concurrent Requests     | **Horizontally Scalable** |
 
 > **Note:** Performance metrics depend on the selected LLM, embedding model, retrieval strategy, hardware configuration, and evaluation dataset.
 
@@ -180,9 +180,17 @@ The result is a scalable AI backend capable of delivering:
 
 ---
 
-![CLI UI - RAG Backend API](images/image_2.png)
+## CLI UI 🎆
+
+![CLI UI - RAG Backend API](images/Neural_UI.png)
+
+## Qdrant Vectors🎆
+
 ![CLI UI - Qdrant Vector Search](images/image4.png)
-![CLI UI - Redis Insight](images/image5.png)
+
+## Response from RAG ,stored in Redis Memory 🎆
+
+![CLI UI - Redis Insight](images/redis_response.png)
 
 <!--## Features
 
@@ -205,6 +213,7 @@ The result is a scalable AI backend capable of delivering:
 - **Interview Booking**: Automatic extraction of booking intent using LLM
 - **Session Management**: Redis-based chat session persistence 
 -->
+
 <!--## Architecture
 
 ```
@@ -270,8 +279,9 @@ cp .env.example .env
 docker-compose up -d
 
 # Or start services manually:
-# - Qdrant: http://localhost:6333
+# - Qdrant: http://localhost:6333/dashboard
 # - Redis: localhost:6379
+# - Redis Insight: localhost:5540
 ```
 
 5. **Run the server**:
@@ -287,11 +297,11 @@ python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 ### Swagger UI Documentation
 
-![Swagger UI - RAG Backend API](images/Screenshot_1.png)
+![Swagger UI - RAG Backend API](images/fastapi.png)
 
 ### ReDoc API Documentation
 
-![ReDoc - RAG Backend API Documentation](images/Screenshot_2.png)
+![ReDoc - RAG Backend API Documentation](images/redoc.png)
 
 ## API Endpoints
 
